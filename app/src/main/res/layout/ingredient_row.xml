@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="6dp">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ivIngredient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@tools:sample/avatars"/>
+
+        <TextView
+            android:id="@+id/ingredientName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="tvTitle"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:layout_toRightOf="@id/ivIngredient"
+            android:layout_toEndOf="@id/ivIngredient"
+            android:layout_marginLeft = "10dp"
+            android:layout_marginStart = "10dp"/>
+
+        <TextView
+            android:id="@+id/ingredientAmount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_toEndOf="@id/ivIngredient"
+            android:layout_toRightOf="@id/ivIngredient"
+            android:text="tvMinutes" />
+
+        <TextView
+            android:id="@+id/ingredientUnit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="tvServings"
+            android:layout_toRightOf="@id/ivIngredient"
+            android:layout_toEndOf="@id/ivIngredient"
+            android:layout_marginLeft = "10dp"
+            android:layout_marginStart = "10dp"
+            android:layout_marginTop="40dp"/>
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

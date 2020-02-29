@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">CaffeineOverflow264</string>
+<!--    <string name="title_home">Home</string>-->
+<!--    <string name="title_dashboard">Dashboard</string>-->
+<!--    <string name="title_notifications">Notifications</string>-->
+
+    <string name="title_recipe">Recipe</string>
+    <string name="title_log">Log</string>
+    <string name="title_nearby">Nearby</string>
+    <string name="title_calculator">Calculator</string>
+
+
+</resources>

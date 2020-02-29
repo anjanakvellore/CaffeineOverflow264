@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/navigation_recipe">
+
+    <fragment
+        android:id="@+id/navigation_recipe"
+        android:name="com.example.caffeineoverflow264.ui.recipe.RecipeFragment"
+        android:label="@string/title_recipe"
+        tools:layout="@layout/fragment_recipe" />
+
+    <fragment
+        android:id="@+id/navigation_log"
+        android:name="com.example.caffeineoverflow264.ui.log.LogFragment"
+        android:label="@string/title_log"
+        tools:layout="@layout/fragment_log" />
+
+    <fragment
+        android:id="@+id/navigation_nearby"
+        android:name="com.example.caffeineoverflow264.ui.nearby.NearbyFragment"
+        android:label="@string/title_nearby"
+        tools:layout="@layout/fragment_nearby" />
+
+    <fragment
+        android:id="@+id/navigation_calculator"
+        android:name="com.example.caffeineoverflow264.ui.calculator.CalculatorFragment"
+        android:label="@string/title_calculator"
+        tools:layout="@layout/fragment_log" />
+
+
+</navigation>

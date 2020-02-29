@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp" >
+
+    <ImageView
+        android:id="@+id/resImg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:srcCompat="@tools:sample/avatars" />
+
+    <TextView
+        android:id="@+id/resName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="resName"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+
+    <TextView
+        android:id="@+id/resLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="resLocation" />
+
+    <TextView
+        android:id="@+id/resPhone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="resPhone" />
+
+    <TextView
+        android:id="@+id/resTimings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="resTimings" />
+
+    <TextView
+        android:id="@+id/resAvgCost"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="resAvgCost" />
+
+    <TextView
+        android:id="@+id/resRating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="resRating" />
+
+    <TextView
+        android:id="@+id/resVotes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="resVotes" />
+
+</LinearLayout>

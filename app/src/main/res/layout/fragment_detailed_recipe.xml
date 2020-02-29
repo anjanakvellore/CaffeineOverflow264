@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/fragment_detailed_recipe">
+
+    <TextView
+        android:id="@+id/recipeTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        />
+
+    <TextView
+        android:id="@+id/recipeInstruction"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:ellipsize="end"
+        android:maxLines="10"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ingridentList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>
