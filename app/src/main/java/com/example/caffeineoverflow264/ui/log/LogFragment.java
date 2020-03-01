@@ -22,11 +22,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.caffeineoverflow264.R;
 import com.example.caffeineoverflow264.model.CalendarEvent;
+import com.example.caffeineoverflow264.ui.SharedViewModel;
 import com.example.caffeineoverflow264.ui.recipe.RecipeFragment;
 import com.example.caffeineoverflow264.util.CalendarEventListAdapter;
 import com.example.caffeineoverflow264.util.OnCalendarEventClickListener;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,6 +48,7 @@ public class LogFragment extends Fragment {
     private CalendarEventListAdapter calendarEventAdapter;
 
     private LogViewModel logViewModel;
+    private SharedViewModel sharedViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +60,9 @@ public class LogFragment extends Fragment {
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+
+        sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+
         // Generate calendar UI
         generateCalendar();
 
@@ -154,6 +160,11 @@ public class LogFragment extends Fragment {
                 .show();
     }
 
+    private void changeIcon(){
+        BottomNavigationView btnNavView = this.getView().getRootView().findViewById(R.id.nav_view) ;
+        btnNavView.getMenu().findItem(R.id.navigation_recipe).setChecked(true);
+    }
+
     private void chooseActionDialog(CalendarEvent calendarEvent) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -163,16 +174,12 @@ public class LogFragment extends Fragment {
                 .setPositiveButton("get recipes", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-//                        Intent intent = new Intent(getApplicationContext(), RecipeActivity.class);
-//                        intent.putExtra("eventName", calendarEvent.getEventName());
-//                        startActivity(intent);
+                        Log.e(TAG, "calendarEvent " + calendarEvent.getEventName());
+                        sharedViewModel.selectEvent(calendarEvent.getEventName());
                         RecipeFragment recipeFragment = new RecipeFragment();
-                        Bundle args = new Bundle();
-                        args.putString("eventName", calendarEvent.getEventName());
-
                         getFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                                new RecipeFragment()).commit();
-
+                                recipeFragment).commit();
+                        changeIcon();
                     }
                 })
                 .setNegativeButton("go to amazon", new DialogInterface.OnClickListener() {

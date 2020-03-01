@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,9 +27,11 @@ import com.example.caffeineoverflow264.model.TopResults;
 import com.example.caffeineoverflow264.repository.service.api.RecipeApiService;
 import com.example.caffeineoverflow264.util.OnItemClickListener;
 import com.example.caffeineoverflow264.util.ResultListAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,23 +59,49 @@ public class RecipeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         System.out.println("MIA       Recipe Fragment -> onCreateView()");
 
+
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Recipe");
         ((AppCompatActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#008577")));
-
-        // Retrieve the string of drink name sent back from Log
-        if (savedInstanceState != null) {
-            eventName = getArguments().getString("eventName");
-        }
-        if (eventName != null && eventName.length() != 0) {
-            edt_drinkquery.setText(eventName);
-            getRecipes(eventName);
-        }
 
         return inflater.inflate(R.layout.fragment_recipe, container, false);
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        System.out.println("MIA       Recipe Fragment -> onViewCreated()");
+
+        // TODO: change icon with the open fragment
+//        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.nav_view);
+//        View view = bottomNavigationView.findViewById(R.id.navigation_recipe);
+//        view.performClick();
+
+
         sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+
+        // Retrieve the string of drink name sent back from Log
+        sharedViewModel.getSelectedEvent().observe(getViewLifecycleOwner(), new Observer<String>() {
+            @Override
+            public void onChanged(String eventName) {
+                edt_drinkquery.setText(eventName);
+                getRecipes(sharedViewModel.getSelectedEvent().getValue());
+            }
+        });
+
+        // Dump data into recycler view
+        RecyclerView recyclerView = getView().findViewById(R.id.rvRecipeList);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        resultListAdapter = new ResultListAdapter(results, new OnItemClickListener() {
+            @Override
+            public void onItemClick(Result result) {
+                Log.d(TAG, "MIA      OnItemClick(): " + result.getTitle());
+                sharedViewModel.selectResult(result);
+                getFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
+                        new DetailedRecipeFragment()).commit();
+            }
+        });
+        recyclerView.setAdapter(resultListAdapter);
+
+
 
         edt_drinkquery = getView().findViewById(R.id.edt_drinkquery);
         // Add event listener for the search button
@@ -86,20 +115,7 @@ public class RecipeFragment extends Fragment {
             }
         });
 
-        // Dump data into recycler view
-        RecyclerView recyclerView = getView().findViewById(R.id.rvRecipeList);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        resultListAdapter = new ResultListAdapter(results, new OnItemClickListener() {
-            @Override
-            public void onItemClick(Result result) {
-                Log.d(TAG, "MIA      OnItemClick(): " + result.getTitle());
-                sharedViewModel.select(result);
-                getFragmentManager().beginTransaction().replace(R.id.nav_host_fragment,
-                        new DetailedRecipeFragment()).commit();
-            }
-        });
-        recyclerView.setAdapter(resultListAdapter);
+
     }
 
     private void getRecipes(String drinkName) {

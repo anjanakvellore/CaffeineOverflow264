@@ -74,10 +74,10 @@ public class DetailedRecipeFragment extends Fragment {
         recyclerView.setAdapter(ingridentListAdapter);
 
         // Get selected recipe <Result> and get a detailed recipe of it
-        sharedViewModel.getSelected().observe(getViewLifecycleOwner(), new Observer<Result>() {
+        sharedViewModel.getSelectedResult().observe(getViewLifecycleOwner(), new Observer<Result>() {
             @Override
             public void onChanged(Result result) {
-                getDetailRecipe(sharedViewModel.getSelected().getValue().getId());
+                getDetailRecipe(sharedViewModel.getSelectedResult().getValue().getId());
             }
         });
     }
