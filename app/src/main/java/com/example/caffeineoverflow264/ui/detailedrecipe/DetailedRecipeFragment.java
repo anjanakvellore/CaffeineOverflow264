@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.lifecycle.Observer;
@@ -29,6 +30,7 @@ import com.example.caffeineoverflow264.repository.service.api.DetailedRecipeApiS
 import com.example.caffeineoverflow264.ui.SharedViewModel;
 import com.example.caffeineoverflow264.util.IngridentListAdapter;
 import com.example.caffeineoverflow264.util.OnIngredientClickListener;
+import com.example.caffeineoverflow264.repository.service.DownloadService;
 
 
 import java.util.ArrayList;
@@ -86,6 +88,14 @@ public class DetailedRecipeFragment extends Fragment {
                 getDetailRecipe(sharedViewModel.getSelectedResult().getValue().getId());
             }
         });
+
+        Button downloadBtn = view.findViewById(R.id.downloadBtn);
+        downloadBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                download();
+            }
+        });
     }
 
     private void getDetailRecipe(String id) {
@@ -121,4 +131,21 @@ public class DetailedRecipeFragment extends Fragment {
         });
     }
 
+    public void download(){
+        StringBuilder ingredientString = new StringBuilder();
+        String instructions = detailedRecipe.getInstructions();
+        String title = detailedRecipe.getTitle();
+        ingredientString.append("Ingredients");
+        ingredientString.append("\n");
+        for(Ingredient ingredient:detailedRecipe.getExtendedIngredients()){
+            ingredientString.append(ingredient.getName()+ "("+ingredient.getAmount()+" "+ingredient.getUnit()+")");
+            ingredientString.append("\n");
+        }
+        Intent intent = new Intent(getActivity(), DownloadService.class);
+        intent.putExtra("instructions",instructions);
+        intent.putExtra("title",title);
+        intent.putExtra("ingredients",ingredientString.toString());
+        getActivity().startService(intent);
+
+    }
 }
