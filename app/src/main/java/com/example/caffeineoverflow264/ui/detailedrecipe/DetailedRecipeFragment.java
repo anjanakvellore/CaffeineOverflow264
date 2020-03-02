@@ -5,8 +5,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -68,7 +70,11 @@ public class DetailedRecipeFragment extends Fragment {
             @Override
             public void onIngredientClick(Ingredient ingredient) {
                 Log.d(TAG, "ingredient clicked: " + ingredient.getName());
-                //TODO: direct to external app Amazon
+                //TODO: direct to external  Amazon
+                String data = "https://www.amazon.com/s?k=" + ingredient.getName()+"&ref=nb_sb_noss";
+                Intent defaultBrowser = Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER);
+                defaultBrowser.setData(Uri.parse(data));
+                startActivity(defaultBrowser);
             }
         });
         recyclerView.setAdapter(ingridentListAdapter);

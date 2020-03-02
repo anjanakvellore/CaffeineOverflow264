@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.caffeineoverflow264.repository.service.api.DatabaseHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -50,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
                     this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     REQUEST_LOCATION);
         }
+
+        // initialize database
+        DatabaseHelper.createDatabaseHelper(getApplicationContext());
     }
 
 }
