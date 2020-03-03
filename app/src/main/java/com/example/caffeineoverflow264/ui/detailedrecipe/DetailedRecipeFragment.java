@@ -96,6 +96,14 @@ public class DetailedRecipeFragment extends Fragment {
                 download();
             }
         });
+
+        Button shareBtn = view.findViewById(R.id.shareBtn);
+        shareBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                share();
+            }
+        });
     }
 
     private void getDetailRecipe(String id) {
@@ -147,5 +155,28 @@ public class DetailedRecipeFragment extends Fragment {
         intent.putExtra("ingredients",ingredientString.toString());
         getActivity().startService(intent);
 
+    }
+
+    public void share(){
+        StringBuilder recipeString = new StringBuilder();
+        recipeString.append(detailedRecipe.getTitle());
+        recipeString.append("\n");
+        recipeString.append("\n");
+        recipeString.append("Ingredients");
+        recipeString.append("\n");
+        recipeString.append("\n");
+        for(Ingredient ingredient:detailedRecipe.getExtendedIngredients()){
+            recipeString.append(ingredient.getName()+ "("+ingredient.getAmount()+" "+ingredient.getUnit()+")");
+            recipeString.append("\n");
+        }
+        recipeString.append("\n");
+        recipeString.append(detailedRecipe.getInstructions());
+
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT,recipeString.toString());
+        String intentTitle = "Share recipe via....";
+        Intent chosenIntent = Intent.createChooser(intent,intentTitle);
+        startActivity(chosenIntent);
     }
 }
