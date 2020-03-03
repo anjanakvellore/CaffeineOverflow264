@@ -11,11 +11,21 @@
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         />
 
-    <Button
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/downloadBtn"
-        android:text="Download"/>
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/downloadBtn"
+            android:text="Download"/>
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/shareBtn"
+            android:text="Share"/>
+    </LinearLayout>
 
     <TextView
         android:id="@+id/recipeInstruction"
