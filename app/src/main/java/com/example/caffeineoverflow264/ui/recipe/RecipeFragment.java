@@ -75,12 +75,6 @@ public class RecipeFragment extends Fragment {
         System.out.println("MIA       Recipe Fragment -> onViewCreated()");
         this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        // TODO: change icon with the open fragment
-//        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.nav_view);
-//        View view = bottomNavigationView.findViewById(R.id.navigation_recipe);
-//        view.performClick();
-
-
         sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
 
         // Retrieve the string of drink name sent back from Log
