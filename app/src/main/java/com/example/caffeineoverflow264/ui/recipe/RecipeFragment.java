@@ -7,8 +7,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -39,6 +42,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+import static android.content.Context.INPUT_METHOD_SERVICE;
+
 public class RecipeFragment extends Fragment {
 
     private static final String TAG = RecipeFragment.class.getSimpleName();
@@ -68,6 +73,7 @@ public class RecipeFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         System.out.println("MIA       Recipe Fragment -> onViewCreated()");
+        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         // TODO: change icon with the open fragment
 //        BottomNavigationView bottomNavigationView = (BottomNavigationView) findViewById(R.id.nav_view);
@@ -112,6 +118,12 @@ public class RecipeFragment extends Fragment {
                 String drinkQueryStr = edt_drinkquery.getText().toString();
                 Log.d(TAG,"MIA       drinkQueryStr: " + drinkQueryStr );
                 getRecipes(drinkQueryStr);
+                try {
+                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
             }
         });
 
