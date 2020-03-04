@@ -49,11 +49,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="tvServings"
-            android:layout_toRightOf="@id/ivIngredient"
-            android:layout_toEndOf="@id/ivIngredient"
+            android:layout_toRightOf="@id/ingredientAmount"
+            android:layout_toEndOf="@id/ingredientAmount"
             android:layout_marginLeft = "10dp"
             android:layout_marginStart = "10dp"
-            android:layout_marginTop="40dp"/>
+            android:layout_marginTop="20dp"/>
 
     </RelativeLayout>
 
