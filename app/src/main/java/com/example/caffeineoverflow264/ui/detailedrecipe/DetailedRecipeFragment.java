@@ -12,6 +12,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -89,7 +92,7 @@ public class DetailedRecipeFragment extends Fragment {
             }
         });
 
-        Button downloadBtn = view.findViewById(R.id.downloadBtn);
+        /*Button downloadBtn = view.findViewById(R.id.downloadBtn);
         downloadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,7 +106,38 @@ public class DetailedRecipeFragment extends Fragment {
             public void onClick(View v) {
                 share();
             }
-        });
+        });*/
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        //inflate menu
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.detailed_recipe_options_menu, menu);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //handle menu item clicks
+        int id = item.getItemId();
+
+       if (id == R.id.downloadOption) {
+            download();
+        }
+        if (id == R.id.shareOption) {
+            share();
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void getDetailRecipe(String id) {
