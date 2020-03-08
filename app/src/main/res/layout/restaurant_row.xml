@@ -1,58 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10dp" >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="6dp">
 
-    <ImageView
-        android:id="@+id/resImg"
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:padding="8dp"
+        android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/resName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="resName"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+        <!--<ImageView
+            android:id="@+id/resImg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:srcCompat="@tools:sample/avatars" />-->
 
-    <TextView
-        android:id="@+id/resLocation"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="resLocation" />
+        <TextView
+            android:id="@+id/resName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="resName"
+            android:layout_marginTop="10dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:textColor="@color/colorPrimaryDark" />
 
-    <TextView
-        android:id="@+id/resPhone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="resPhone" />
 
-    <TextView
-        android:id="@+id/resTimings"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="resTimings" />
+        <TextView
+            android:id="@+id/resLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:text="resLocation" />
 
-    <TextView
-        android:id="@+id/resAvgCost"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="resAvgCost" />
 
-    <TextView
-        android:id="@+id/resRating"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="resRating" />
+        <TextView
+            android:id="@+id/resPhone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:text="resPhone" />
 
-    <TextView
-        android:id="@+id/resVotes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="resVotes" />
+        <LinearLayout
+            android:id="@+id/resTimingsLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            >
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/resTimingsLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:text="Timings: "/>
+
+            <TextView
+                android:id="@+id/resTimings"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                android:text="resTimings" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/resAvgCostLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+                <TextView
+                    android:id="@+id/resAvgCostLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:text="Average Cost for Two: "/>
+
+                <TextView
+                    android:id="@+id/resAvgCost"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:text="resAvgCost" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/resRatingLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            >
+
+
+                <TextView
+                    android:id="@+id/resRatingLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:text="Rating: "/>
+
+                <TextView
+                    android:id="@+id/resRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:text="resRating" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp"
+            >
+
+                <TextView
+                    android:id="@+id/resVotesLabel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:text="Votes: "/>
+
+
+                <TextView
+                    android:id="@+id/resVotes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"
+                    android:text="resVotes" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

@@ -33,7 +33,7 @@ public class SearchNearByAdapter extends RecyclerView.Adapter<SearchNearByAdapte
 
         ViewHolder(View itemView) {
             super(itemView);
-            imageresImg = itemView.findViewById(R.id.resImg);
+            //imageresImg = itemView.findViewById(R.id.resImg);
             txtresName = itemView.findViewById(R.id.resName);
             txtresLocation = itemView.findViewById(R.id.resLocation);
             txtresPhone = itemView.findViewById(R.id.resPhone);
@@ -56,10 +56,7 @@ public class SearchNearByAdapter extends RecyclerView.Adapter<SearchNearByAdapte
         //holder.tv.setText(program);
         //Picasso.get().load(BASE_URL+program.getPosterPath()).resize(300, 300).into(holder.imageView);
         holder.txtresName.setText(res.getRestaurantData().getName());
-        String location = res.getRestaurantData().getLocation().getAddress()+", "+
-                res.getRestaurantData().getLocation().getCity()+", "+
-                res.getRestaurantData().getLocation().getLocality()+", "+
-                res.getRestaurantData().getLocation().getZipCode();
+        String location = res.getRestaurantData().getLocation().getAddress();
         holder.txtresLocation.setText(location);
         holder.txtresPhone.setText(res.getRestaurantData().getPhoneNumbers());
         holder.txtresTimings.setText(res.getRestaurantData().getTimings());
