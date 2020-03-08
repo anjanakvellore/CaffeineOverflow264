@@ -66,7 +66,7 @@ public class RecipeFragment extends Fragment {
 
 
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Recipe");
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#008577")));
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ffe95451")));
 
         return inflater.inflate(R.layout.fragment_recipe, container, false);
     }
