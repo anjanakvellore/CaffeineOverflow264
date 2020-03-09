@@ -17,6 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:hint="How many?"
+        android:hint="How many (oz)?"
         android:inputType="number" />
 </LinearLayout>

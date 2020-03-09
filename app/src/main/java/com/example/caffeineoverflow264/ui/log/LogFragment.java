@@ -54,6 +54,8 @@ public class LogFragment extends Fragment {
     private LogViewModel logViewModel;
     private SharedViewModel sharedViewModel;
 
+    private Integer maxCaffinie;
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         logViewModel =
@@ -66,7 +68,7 @@ public class LogFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
-
+        maxCaffinie = sharedViewModel.getMaxCaffinie().getValue();
         // Generate calendar UI
         generateCalendar();
 
@@ -78,8 +80,6 @@ public class LogFragment extends Fragment {
             @Override
             public void onCalendarEventClick(CalendarEvent calendarEvent) {
                 Log.d(TAG, "Calendar event: " + calendarEvent.getEventName());
-                // TODO FIXME
-                // Show a dialog which will either directs us to the recipe search or amazon
                 chooseActionDialog(calendarEvent);
             }
         });
@@ -158,7 +158,6 @@ public class LogFragment extends Fragment {
         CompactCalendarView compactCalendarView = (CompactCalendarView) getView().findViewById(R.id.calendarView);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(dateFormatForMonth.format(compactCalendarView.getFirstDayOfCurrentMonth()));
         compactCalendarView.setFirstDayOfWeek(Calendar.MONDAY);
-
         // Get all the events and push into the calendar
         Cursor allLogsCursor = DatabaseHelper.getLogDetails();
         ArrayList<Date> dates = new ArrayList<>();
@@ -202,17 +201,32 @@ public class LogFragment extends Fragment {
         String currDateClickedStr = dateClicked.toString();
         Cursor logCursor = DatabaseHelper.getLogDetailsOnOneDay(currDateClickedStr);
         System.out.println("Date clicked " + currDateClickedStr);
-        if (logCursor.moveToFirst()) {
-            do {
-                String coffeeName = DatabaseHelper.getCoffeeNameById( logCursor.getInt(2));
-                int oz = logCursor.getInt(3);
-                CalendarEvent calendarEvent = new CalendarEvent(coffeeName, oz);
-                // TODO: FIXEME Caffine Check
-                int eventColor = Color.GREEN;
-                if (oz == 16)
-                    eventColor = Color.BLACK;
-                events.add(new Event(eventColor, dateClicked.getTime(), calendarEvent));
-            } while (logCursor.moveToNext());
+
+        if (!logCursor.moveToFirst()) {
+            return;
+        }
+
+        List<CalendarEvent> allEventsOnThatDay = new ArrayList<>();
+        int caffineIntake = 0;
+        // TODO: DELETE THIS HARDCODED NUMBER for maxCaffinie
+        maxCaffinie = 100;
+        do {
+            String coffeeName = DatabaseHelper.getCoffeeNameById( logCursor.getInt(2));
+            int coffeeId = logCursor.getInt(2);
+            // Get caffine amount per oz for this coffeeId
+            int caffineAmount = DatabaseHelper.getCaffeineAmount(coffeeId);
+            int oz = logCursor.getInt(3);
+            caffineIntake += oz * caffineAmount;
+            CalendarEvent calendarEvent = new CalendarEvent(coffeeName, oz);
+            allEventsOnThatDay.add(calendarEvent);
+        } while (logCursor.moveToNext());
+
+        int eventColor = Color.GREEN;
+        if (caffineIntake > maxCaffinie ) {
+            eventColor = Color.BLACK;
+        }
+        for (CalendarEvent calendarEvent : allEventsOnThatDay) {
+            events.add(new Event(eventColor, dateClicked.getTime(), calendarEvent));
         }
     }
 
