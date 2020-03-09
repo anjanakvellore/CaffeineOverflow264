@@ -39,40 +39,32 @@ public class NearbyFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#ffe95451")));
         View rootView = inflater.inflate(R.layout.fragment_nearby, container, false);
-        System.out.println("MIA       nearby Fragment onCreateView");
         return rootView;
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        System.out.println("MIA       nearby Fragment onViewCreated");
         recyclerView = view.findViewById(R.id.rvRestaurants);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setHasFixedSize(true);
         LocationService locationService = LocationService.getLocationManager(getContext());
 
         if(locationService.location!=null) {
-            System.out.println("MIA     : " + locationService.location.toString());
             this.latitude = locationService.location.getLatitude();
             this.longitude = locationService.location.getLongitude();
             SearchNearbyViewModel model = new ViewModelProvider(this).get(SearchNearbyViewModel.class);
             model.getRestaurantDetails(latitude,longitude).observe(getViewLifecycleOwner(), restaurantList -> {
                 if (restaurantList != null) {
-                    System.out.println("MIA        : " + restaurantList.size());
                     restaurants = restaurantList;
                     adapter = new SearchNearByAdapter(restaurants);
-                    System.out.println("Restaurants: " + restaurants.size());
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
                 }
             });
-
         }
         else{
-            System.out.println("MIA       :"  + "TOAST SHOWS UP");
             Toast.makeText(getContext(),"Need location permissions to proceed.",Toast.LENGTH_SHORT);
-            //TextView textView = findViewById(R.id.nearbytext);
-            //textView.setText("Need location permissions to proceed.");
         }
+
     }
 }
