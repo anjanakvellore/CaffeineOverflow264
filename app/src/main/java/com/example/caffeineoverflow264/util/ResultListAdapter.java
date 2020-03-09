@@ -20,14 +20,12 @@ public class ResultListAdapter extends RecyclerView.Adapter<ResultListAdapter.Vi
     private List<Result> results;
     private OnItemClickListener listener;
 
-
     public ResultListAdapter(List<Result> results, OnItemClickListener listener) {
         this.listener = listener;
         this.results = results;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        //        TextView tvId;
+    class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;
         ImageView ivRecipe;
         TextView tvMinutes;
@@ -37,12 +35,11 @@ public class ResultListAdapter extends RecyclerView.Adapter<ResultListAdapter.Vi
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             ivRecipe = itemView.findViewById(R.id.ivRecipe);
-//            tvId = itemView.findViewById(R.id.tvId);
             tvMinutes = itemView.findViewById(R.id.tvMinutes);
             tvServings = itemView.findViewById(R.id.tvServings);
         }
 
-        public void bind(final Result item, final OnItemClickListener listener) {
+        void bind(final Result item, final OnItemClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override public void onClick(View v) {
                     System.out.println("I am clicked");
@@ -51,7 +48,6 @@ public class ResultListAdapter extends RecyclerView.Adapter<ResultListAdapter.Vi
             });
         }
     }
-
 
     @NonNull
     @Override
@@ -65,13 +61,10 @@ public class ResultListAdapter extends RecyclerView.Adapter<ResultListAdapter.Vi
         Result result = results.get(position);
         holder.tvTitle.setText(result.getTitle());
         Picasso.get().load("https://spoonacular.com/recipeImages/" + result.getId() +"-480x360.jpg").into(holder.ivRecipe);
-//        holder.tvId.setText(result.getId());
         holder.tvMinutes.setText("Minutes to prepare: "+String.valueOf(result.getReadyInMinutes()));
         holder.tvServings.setText("Serving size: "+String.valueOf(result.getServings()));
         holder.bind(results.get(position), listener);
     }
-
-
 
     @Override
     public int getItemCount() {

@@ -17,10 +17,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,85 +29,79 @@ import com.example.caffeineoverflow264.R;
 import com.example.caffeineoverflow264.model.DetailedRecipe;
 import com.example.caffeineoverflow264.model.Ingredient;
 import com.example.caffeineoverflow264.model.Result;
-import com.example.caffeineoverflow264.repository.service.api.DetailedRecipeApiService;
 import com.example.caffeineoverflow264.ui.SharedViewModel;
 import com.example.caffeineoverflow264.util.IngridentListAdapter;
 import com.example.caffeineoverflow264.util.OnIngredientClickListener;
 import com.example.caffeineoverflow264.repository.service.DownloadService;
 
-
 import java.util.ArrayList;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
+import java.util.List;
+import java.util.Objects;
 
 public class DetailedRecipeFragment extends Fragment {
-    static final String TAG = DetailedRecipeFragment.class.getSimpleName();
-    static final String BASE_URL = "https://spoonacular-recipe-food-nutrition-v1.p.rapidapi.com/";
+    private static final String TAG = DetailedRecipeFragment.class.getSimpleName();
 
+    private TextView recipeNameTv;
+    private TextView recipeInstructionTv;
+    private RecyclerView recyclerView;
+
+    private String recipeId;
     private DetailedRecipe detailedRecipe;
-    private ArrayList<Ingredient> ingredients = new ArrayList<>();
+    private List<Ingredient> ingredients = new ArrayList<>();
     private IngridentListAdapter ingridentListAdapter;
-    private Retrofit retrofit;
 
     private SharedViewModel sharedViewModel;
+    private DetailedRecipeViewModel detailedRecipeViewModel;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         System.out.println("MIA       DetailedRecipe Fragment -> onCreateView()");
-
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Recipe Detail");
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#008577")));
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Recipe Detail");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#008577")));
 
         return inflater.inflate(R.layout.fragment_detailed_recipe, container, false);
     }
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
-
-        // Dump data into recycler view
-        RecyclerView recyclerView = getView().findViewById(R.id.ingridentList);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        ingridentListAdapter = new IngridentListAdapter(ingredients, new OnIngredientClickListener() {
-            @Override
-            public void onIngredientClick(Ingredient ingredient) {
-                Log.d(TAG, "ingredient clicked: " + ingredient.getName());
-                //TODO: direct to external  Amazon
-                String data = "https://www.amazon.com/s?k=" + ingredient.getName()+"&ref=nb_sb_noss";
-                Intent defaultBrowser = Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER);
-                defaultBrowser.setData(Uri.parse(data));
-                startActivity(defaultBrowser);
-            }
-        });
-        recyclerView.setAdapter(ingridentListAdapter);
-
-        // Get selected recipe <Result> and get a detailed recipe of it
         sharedViewModel.getSelectedResult().observe(getViewLifecycleOwner(), new Observer<Result>() {
             @Override
             public void onChanged(Result result) {
-                getDetailRecipe(sharedViewModel.getSelectedResult().getValue().getId());
+                recipeId = Objects.requireNonNull(sharedViewModel.getSelectedResult().getValue()).getId();
+                displayRecipe(recipeId);
             }
         });
 
-        /*Button downloadBtn = view.findViewById(R.id.downloadBtn);
-        downloadBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                download();
-            }
-        });
-
-        Button shareBtn = view.findViewById(R.id.shareBtn);
-        shareBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                share();
-            }
-        });*/
+        recipeNameTv = getView().findViewById(R.id.recipeTitle);
+        recipeInstructionTv = getView().findViewById(R.id.recipeInstruction);
+        detailedRecipeViewModel = new ViewModelProvider(this).get(DetailedRecipeViewModel.class);
+        recyclerView = getView().findViewById(R.id.ingridentList);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
+
+    private void displayRecipe(String id) {
+        detailedRecipeViewModel.getDetailedRecipe(id).observe(getViewLifecycleOwner(), data -> {
+            if (data != null) {
+                detailedRecipe = data;
+                recipeNameTv.setText(detailedRecipe.getTitle());
+                recipeInstructionTv.setText(detailedRecipe.getInstructions());
+                ingredients = data.getExtendedIngredients();
+                ingridentListAdapter = new IngridentListAdapter(ingredients, new OnIngredientClickListener() {
+                    @Override
+                    public void onIngredientClick(Ingredient ingredient) { // Direct to Amazon Web Browser
+                        Log.d(TAG, "ingredient clicked: " + ingredient.getName());
+                        String data = "https://www.amazon.com/s?k=" + ingredient.getName() + "&ref=nb_sb_noss";
+                        Intent defaultBrowser = Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER);
+                        defaultBrowser.setData(Uri.parse(data));
+                        startActivity(defaultBrowser);
+                    }
+                });
+                recyclerView.setAdapter(ingridentListAdapter);
+                ingridentListAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -129,69 +123,35 @@ public class DetailedRecipeFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         //handle menu item clicks
         int id = item.getItemId();
-
-       if (id == R.id.downloadOption) {
+        if (id == R.id.downloadOption) {
             download();
         }
         if (id == R.id.shareOption) {
             share();
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    private void getDetailRecipe(String id) {
-        if (retrofit == null) {
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-        }
-        DetailedRecipeApiService recipeDetailApiService = retrofit.create(DetailedRecipeApiService.class);
-        Call<DetailedRecipe> call = recipeDetailApiService.getDetailedRecipe(id);
-        Log.d(TAG, "MIA      call.request(): " + call.request().toString());
 
-        call.enqueue(new Callback<DetailedRecipe>() {
-            @Override
-            public void onResponse(Call<DetailedRecipe> call, Response<DetailedRecipe> response) {
-                detailedRecipe = response.body();
-                ingredients.clear();
-                ingredients.addAll(detailedRecipe.getExtendedIngredients());
-
-                TextView recipeNameTv = getView().findViewById(R.id.recipeTitle);
-                recipeNameTv.setText(detailedRecipe.getTitle());
-                TextView recipeInstructionTv = getView().findViewById(R.id.recipeInstruction);
-                recipeInstructionTv.setText(detailedRecipe.getInstructions());
-
-                // Set ingredients
-                ingridentListAdapter.notifyDataSetChanged();
-            }
-            @Override
-            public void onFailure(Call<DetailedRecipe> call, Throwable t) {
-                Log.e(TAG, "DetailedRecipe API call fails");
-            }
-        });
-    }
-
-    public void download(){
+    private void download() {
         StringBuilder ingredientString = new StringBuilder();
         String instructions = detailedRecipe.getInstructions();
         String title = detailedRecipe.getTitle();
         ingredientString.append("Ingredients");
         ingredientString.append("\n");
-        for(Ingredient ingredient:detailedRecipe.getExtendedIngredients()){
-            ingredientString.append(ingredient.getName()+ "("+ingredient.getAmount()+" "+ingredient.getUnit()+")");
+        for (Ingredient ingredient : detailedRecipe.getExtendedIngredients()) {
+            ingredientString.append(ingredient.getName() + "(" + ingredient.getAmount() + " " + ingredient.getUnit() + ")");
             ingredientString.append("\n");
         }
         Intent intent = new Intent(getActivity(), DownloadService.class);
-        intent.putExtra("instructions",instructions);
-        intent.putExtra("title",title);
-        intent.putExtra("ingredients",ingredientString.toString());
+        intent.putExtra("instructions", instructions);
+        intent.putExtra("title", title);
+        intent.putExtra("ingredients", ingredientString.toString());
         getActivity().startService(intent);
 
     }
 
-    public void share(){
+    private void share() {
         StringBuilder recipeString = new StringBuilder();
         recipeString.append(detailedRecipe.getTitle());
         recipeString.append("\n");
@@ -199,8 +159,8 @@ public class DetailedRecipeFragment extends Fragment {
         recipeString.append("Ingredients");
         recipeString.append("\n");
         recipeString.append("\n");
-        for(Ingredient ingredient:detailedRecipe.getExtendedIngredients()){
-            recipeString.append(ingredient.getName()+ "("+ingredient.getAmount()+" "+ingredient.getUnit()+")");
+        for (Ingredient ingredient : detailedRecipe.getExtendedIngredients()) {
+            recipeString.append(ingredient.getName() + "(" + ingredient.getAmount() + " " + ingredient.getUnit() + ")");
             recipeString.append("\n");
         }
         recipeString.append("\n");
@@ -208,9 +168,9 @@ public class DetailedRecipeFragment extends Fragment {
 
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT,recipeString.toString());
+        intent.putExtra(Intent.EXTRA_TEXT, recipeString.toString());
         String intentTitle = "Share recipe via....";
-        Intent chosenIntent = Intent.createChooser(intent,intentTitle);
+        Intent chosenIntent = Intent.createChooser(intent, intentTitle);
         startActivity(chosenIntent);
     }
 }
