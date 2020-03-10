@@ -38,10 +38,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
      */
     public static void updateDatabase(SQLiteDatabase db){
-//        db.execSQL("DROP TABLE IF EXISTS COFFEE");
-//        db.execSQL("DROP TABLE IF EXISTS COFFEESIZE");
-//        db.execSQL("DROP TABLE IF EXISTS USER");
-//        db.execSQL("DROP TABLE IF EXISTS LOG");
+        db.execSQL("DROP TABLE IF EXISTS COFFEE");
+        db.execSQL("DROP TABLE IF EXISTS COFFEESIZE");
+        db.execSQL("DROP TABLE IF EXISTS USER");
+        db.execSQL("DROP TABLE IF EXISTS LOG");
         db.execSQL("CREATE TABLE COFFEE(_id INTEGER PRIMARY KEY AUTOINCREMENT, COFFEENAME TEXT,CAFFEINEAMOUNT REAL)");
         db.execSQL("CREATE TABLE COFFEESIZE(_id INTEGER PRIMARY KEY AUTOINCREMENT, SIZENAME TEXT,QUANTITY REAL)");
         db.execSQL("CREATE TABLE USER(_id INTEGER PRIMARY KEY AUTOINCREMENT, HEIGHT REAL, WEIGHT REAL,AGE INTEGER)");
@@ -50,7 +50,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertCoffeeItem( db,"Decaf Coffee (brewed)",.5);
         insertCoffeeItem( db,"Drip Coffee",15);
         insertCoffeeItem( db,"Espresso",51.34);
-        insertCoffeeItem( db,"Mocha",10);
+        insertCoffeeItem( db,"Mocha",11);
+        insertCoffeeItem( db,"Latte",9.4);
     }
 
     public static void insertCoffeeItem(SQLiteDatabase db, String coffeeName, double caffeineAmount) {

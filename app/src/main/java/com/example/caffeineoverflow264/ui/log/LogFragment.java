@@ -54,6 +54,8 @@ public class LogFragment extends Fragment {
     private SharedViewModel sharedViewModel;
 
     private Integer maxCaffinie;
+    int caffineIntake;
+    boolean alert = false;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -208,7 +210,7 @@ public class LogFragment extends Fragment {
         }
 
         List<CalendarEvent> allEventsOnThatDay = new ArrayList<>();
-        int caffineIntake = 0;
+        caffineIntake = 0;
         // TODO: DELETE THIS HARDCODED NUMBER for maxCaffinie
         maxCaffinie = 100;
         do {
@@ -226,11 +228,25 @@ public class LogFragment extends Fragment {
 
         int eventColor = Color.GREEN;
         if (caffineIntake > maxCaffinie) {
+            alert = true;
             eventColor = Color.BLACK;
         }
         for (CalendarEvent calendarEvent : allEventsOnThatDay) {
             events.add(new Event(eventColor, dateClicked.getTime(), calendarEvent));
         }
+    }
+
+    public void showAlertDialog(View view) {
+        // setup the alert builder
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Caffeine Alert");
+        builder.setMessage("Your current caffeine level is: " + caffineIntake +
+                " mg, which exceeds your safe daily dose: " + maxCaffinie +" mg.");
+        // add a button
+        builder.setPositiveButton("Got it", null);
+        // create and show the alert dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     private void addEventDialog() {
@@ -251,6 +267,10 @@ public class LogFragment extends Fragment {
                         addEventToCalendar(eventNameStr, eventCountStr);
                         // Update recycler view
                         updateEventListRecycler(compactCalendarView.getEvents(currDateClicked));
+                        if ( alert ) {
+                            showAlertDialog(getView());
+                            alert = false;
+                        }
                     }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
