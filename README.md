@@ -1,2 +1,2 @@
-# CaffeineOverflow264
- 
+# CaffeineOverflow
+A Coffee Enthusiast-Dreader app. Anjana enjoys her regular coffee, controlled caffeine intake and with the right recipe. Yitian loves her Starbucks App and its amazing features, especially their regular offers. Meanwhile, Santhiya dreads drinking Coffee after 4 pm because the seemingly innocent act keeps her awake till 4 am. How can we combine all these needs into a single app? These needs are basic to every other college student. All of us are in dire need of some caffeine kick when the finals week hit but are equally aware of the negative effects of overconsumption.
