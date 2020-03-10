@@ -50,7 +50,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         insertCoffeeItem( db,"Decaf Coffee (brewed)",.5);
         insertCoffeeItem( db,"Drip Coffee",15);
         insertCoffeeItem( db,"Espresso",51.34);
-        insertCoffeeItem( db,"Mocha",10);
+        insertCoffeeItem( db,"Mocha",11);
+        insertCoffeeItem( db,"Latte",9.4);
     }
 
     public static void insertCoffeeItem(SQLiteDatabase db, String coffeeName, double caffeineAmount) {
