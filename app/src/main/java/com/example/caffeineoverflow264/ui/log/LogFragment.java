@@ -53,7 +53,7 @@ public class LogFragment extends Fragment {
     private LogViewModel logViewModel;
     private SharedViewModel sharedViewModel;
 
-    private Integer maxCaffinie;
+    private double maxCaffinie;
     int caffineIntake;
     boolean alert = false;
 
@@ -211,15 +211,15 @@ public class LogFragment extends Fragment {
 
         List<CalendarEvent> allEventsOnThatDay = new ArrayList<>();
         caffineIntake = 0;
-        // TODO: DELETE THIS HARDCODED NUMBER for maxCaffinie
-        maxCaffinie = 100;
+
+        //maxCaffinie = 100;
         do {
             int coffeeID = logCursor.getInt(2);
             String coffeeName = logViewModel.getCoffeeNameById(coffeeID).getValue();
             int coffeeId = logCursor.getInt(2);
             // Get caffine amount per oz for this coffeeId
             int caffineAmount = logViewModel.getCaffeineAmount(coffeeId).getValue();
-            System.out.println("      view model get caffine amount " + caffineAmount);
+            System.out.println("      view model get caffeine amount " + caffineAmount);
             int oz = logCursor.getInt(3);
             caffineIntake += oz * caffineAmount;
             CalendarEvent calendarEvent = new CalendarEvent(coffeeName, oz);

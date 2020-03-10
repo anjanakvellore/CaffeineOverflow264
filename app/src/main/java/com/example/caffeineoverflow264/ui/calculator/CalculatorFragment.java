@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -32,8 +33,8 @@ public class CalculatorFragment extends Fragment {
     private SharedViewModel sharedViewModel;
 
     DatabaseHelper db;
-    private Button Enter_button, Calculate_button, Remind_button;
-    //private Calculate calculate = new Calculate();
+    private ImageButton Calculate_button, Enter_button;
+    private Button Remind_button;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -52,7 +53,7 @@ public class CalculatorFragment extends Fragment {
         sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
         db = new DatabaseHelper(getActivity().getApplicationContext());
 
-        Enter_button = (Button) getView().findViewById(R.id.Enter_button);
+        Enter_button = (ImageButton) getView().findViewById(R.id.Enter_button);
         Enter_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -67,16 +68,21 @@ public class CalculatorFragment extends Fragment {
 
                 db.insertUser(Double.parseDouble(height_entry_answer),Double.parseDouble
                         (weight_entry_answer),Integer.parseInt(age_entry_answer));
+
+                //Set maxCaffeine for Log
+                sharedViewModel.setMaxCaffinie(calculatorViewModel.maxCaffeine
+                        (Integer.parseInt(age_entry_answer),Double.parseDouble
+                                (weight_entry_answer)));
             }
         });
 
-        Calculate_button = (Button) getView().findViewById(R.id.Calculate_button);
+        Calculate_button = (ImageButton) getView().findViewById(R.id.Calculate_button);
         Calculate_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 TextView result = (TextView) getView().findViewById(R.id.result);
-                double cups = 0.0;//calculate.calculateCups();
-                result.setText(Double.toString(cups));
+                double caffeine = calculatorViewModel.calculateCaffeine();
+                result.setText(Double.toString(caffeine));
             }
         });
 
@@ -84,9 +90,9 @@ public class CalculatorFragment extends Fragment {
         Remind_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText remind_entry = (EditText) getView().findViewById(R.id.remind_entry);
-                Double remind_entry_answer = Double.parseDouble
-                        (remind_entry.getText().toString());
+              //  EditText remind_entry = (EditText) getView().findViewById(R.id.remind_entry);
+               // Double remind_entry_answer = Double.parseDouble
+                //     (remind_entry.getText().toString());
                 //
                 Intent intent = new Intent(getContext(), ReminderBroadcast.class);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),
@@ -101,8 +107,8 @@ public class CalculatorFragment extends Fragment {
                 // Set the alarm to start at approximately the mentioned time
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.set(Calendar.HOUR_OF_DAY, 8);
-                calendar.set(Calendar.MINUTE, 0);
+                calendar.set(Calendar.HOUR_OF_DAY, 4);
+                calendar.set(Calendar.MINUTE, 7);
 
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                         1000 * 60 * 20, pendingIntent);

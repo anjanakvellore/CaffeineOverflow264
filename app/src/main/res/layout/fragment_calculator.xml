@@ -7,54 +7,128 @@
     android:id="@+id/frag_calculator">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:orientation="horizontal"
+        android:translationY="10dp">
 
-        <EditText
-            android:id="@+id/height_entry"
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Height?"
-            android:inputType="numberDecimal" />
+        <ImageView
+            android:layout_width="82dp"
+            android:layout_height="96dp"
+            android:src="@drawable/height"
+            android:translationX="46dp" />
 
-        <EditText
-            android:id="@+id/weight_entry"
-            android:layout_width="110dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Weight?"
-            android:inputType="numberDecimal" />
-
-        <EditText
-            android:id="@+id/age_entry"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
-            android:hint="Age?"
-            android:inputType="number" />
-
-        <Button
-            android:id="@+id/Enter_button"
-            android:layout_height="wrap_content"
+        <ImageView
             android:layout_width="100dp"
-            android:layout_weight="1"
-            android:text="Enter" />
+            android:layout_height="100dp"
+            android:src="@drawable/weight"
+            android:translationX="180dp" />
 
     </LinearLayout>
 
-    <EditText
-        android:id="@+id/sleep_entry"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="How long do you want to stay awake for?"
-        android:inputType="numberDecimal" />
+        android:layout_height="65dp"
+        android:orientation="horizontal"
+        android:translationY="10dp">
 
-    <Button
-        android:id="@+id/Calculate_button"
+        <EditText
+            android:id="@+id/height_entry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/special_elite"
+            android:textSize="24sp"
+            android:hint="Height?"
+            android:inputType="numberDecimal"
+            android:translationX="40dp" />
+
+        <EditText
+            android:id="@+id/weight_entry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/special_elite"
+            android:textSize="24sp"
+            android:hint="Weight?"
+            android:inputType="numberDecimal"
+            android:translationX="170dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Calculate" />
+        android:layout_height="65dp"
+        android:orientation="horizontal"
+        android:translationY="10dp">
+
+        <ImageButton
+            android:id="@+id/Enter_button"
+            android:layout_width="80dp"
+            android:layout_height="63dp"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
+            android:src="@drawable/set"
+            android:translationX="180dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="128dp"
+        android:orientation="horizontal"
+        android:translationY="20dp">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/age"
+            android:translationX="40dp" />
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:src="@drawable/reminder"
+            android:translationX="180dp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:orientation="horizontal"
+        android:translationY="10dp">
+
+        <EditText
+            android:id="@+id/age_entry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/special_elite"
+            android:textSize="24sp"
+            android:hint="Age?"
+            android:inputType="number"
+            android:translationX="40dp"/>
+
+        <Button
+            android:id="@+id/Remind_button"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:translationX="200dp"
+            android:text="Remind me!" />
+
+    </LinearLayout>
+
+
+    <ImageButton
+        android:id="@+id/Calculate_button"
+        android:layout_width="80dp"
+        android:layout_height="63dp"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:background="@android:color/transparent"
+        android:scaleType="fitCenter"
+        android:src="@drawable/calculate"
+        android:translationY="30dp" />
 
     <TextView
         android:id="@+id/result"
@@ -62,25 +136,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_margin="16dp"
-        android:text="Results" />
+        android:fontFamily="@font/special_elite"
+        android:textSize="24sp"
+        android:text="Results"
+        android:translationY="10dp"/>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <EditText
-            android:id="@+id/remind_entry"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="What time?"
-            android:inputType="number" />
-
-        <Button
-            android:id="@+id/Remind_button"
-            android:layout_height="wrap_content"
-            android:layout_width="100dp"
-            android:layout_weight="1"
-            android:text="Remind me!" />
-    </LinearLayout>
 </LinearLayout>

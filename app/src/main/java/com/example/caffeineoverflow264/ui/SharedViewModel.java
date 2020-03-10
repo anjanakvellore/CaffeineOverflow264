@@ -9,7 +9,7 @@ import com.example.caffeineoverflow264.model.Result;
 public class SharedViewModel extends ViewModel {
     private final MutableLiveData<Result> selectedResult = new MutableLiveData<Result>();
     private final MutableLiveData<String> selectedEvent = new MutableLiveData<String>();
-    private final MutableLiveData<Integer> maxCaffinie = new MutableLiveData<>();
+    private final MutableLiveData<Double> maxCaffinie = new MutableLiveData<>();
 
     public void selectResult(Result result) {
         selectedResult.setValue(result);
@@ -17,8 +17,8 @@ public class SharedViewModel extends ViewModel {
     public void selectEvent(String eventName) {
         selectedEvent.setValue(eventName);
     }
-    public void setMaxCaffinie(Integer oz) {
-        maxCaffinie.setValue(oz);
+    public void setMaxCaffinie(double mg) {
+        maxCaffinie.setValue(mg);
     }
 
     public LiveData<Result> getSelectedResult() {
@@ -27,7 +27,7 @@ public class SharedViewModel extends ViewModel {
     public LiveData<String> getSelectedEvent() {
         return selectedEvent;
     }
-    public LiveData<Integer> getMaxCaffinie() {
+    public LiveData<Double> getMaxCaffinie() {
         return maxCaffinie;
     }
 }
