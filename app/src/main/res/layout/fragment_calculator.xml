@@ -42,6 +42,7 @@
             android:inputType="numberDecimal"
             android:translationX="40dp" />
 
+
         <EditText
             android:id="@+id/weight_entry"
             android:layout_width="wrap_content"
@@ -109,12 +110,21 @@
             android:inputType="number"
             android:translationX="40dp"/>
 
+        <EditText
+            android:id="@+id/eReminderTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/special_elite"
+            android:textSize="24sp"
+            android:hint="Time?"
+            android:translationX="170dp"/>
+
         <Button
             android:id="@+id/Remind_button"
             android:layout_height="wrap_content"
             android:layout_width="wrap_content"
-            android:translationX="200dp"
-            android:text="Remind me!" />
+            android:translationX="180dp"
+            android:text="Remind" />
 
     </LinearLayout>
 
