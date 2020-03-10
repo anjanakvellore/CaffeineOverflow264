@@ -2,6 +2,7 @@ package com.example.caffeineoverflow264.ui.calculator;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -86,33 +88,50 @@ public class CalculatorFragment extends Fragment {
             }
         });
 
+        EditText eReminderTime = (EditText) getView().findViewById(R.id.eReminderTime) ;
+        eReminderTime.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // TimePicker
+                Calendar mcurrentTime = Calendar.getInstance();
+                int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
+                int minute = mcurrentTime.get(Calendar.MINUTE);
+                int setHour,setMinute;
+                TimePickerDialog mTimePicker;
+                mTimePicker = new TimePickerDialog(getContext(), new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int selectedHour, int selectedMinute) {
+                        eReminderTime.setText( selectedHour + ":" + selectedMinute);
+                    }
+                }, hour, minute, true); //24 hour time
+                mTimePicker.setTitle("Select Time");
+                mTimePicker.show();
+            }
+        });
+
+
         Remind_button = (Button) getView().findViewById(R.id.Remind_button);
         Remind_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-              //  EditText remind_entry = (EditText) getView().findViewById(R.id.remind_entry);
-               // Double remind_entry_answer = Double.parseDouble
-                //     (remind_entry.getText().toString());
-                //
+                String eReminderTime_answer = eReminderTime.getText().toString();
+                int setHour = Integer.parseInt(eReminderTime_answer.split(":")[0]);
+                int setMinute = Integer.parseInt(eReminderTime_answer.split(":")[1]);
+                System.out.println("H"+setHour+"M"+setMinute);
                 Intent intent = new Intent(getContext(), ReminderBroadcast.class);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(getContext(),
                         0,intent,0);
                 AlarmManager alarmManager = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
 
-                /* long timeAtButtonClick = System.currentTimeMillis();
-                long tenSeconds = 1000 * 10; //millis*/
-
-                //  alarmManager.set(AlarmManager.RTC_WAKEUP,timeAtButtonClick+tenSeconds,pendingIntent);
-
                 // Set the alarm to start at approximately the mentioned time
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.set(Calendar.HOUR_OF_DAY, 4);
-                calendar.set(Calendar.MINUTE, 7);
+                calendar.set(Calendar.HOUR_OF_DAY,setHour);
+                calendar.set(Calendar.MINUTE, setMinute);
 
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                         1000 * 60 * 20, pendingIntent);
-
             }
         });
     }
