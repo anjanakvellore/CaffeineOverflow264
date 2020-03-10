@@ -6,14 +6,18 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.NonNull;
@@ -28,6 +32,8 @@ import com.example.caffeineoverflow264.repository.service.api.DatabaseHelper;
 import com.example.caffeineoverflow264.ui.SharedViewModel;
 
 import java.util.Calendar;
+
+import static android.content.Context.INPUT_METHOD_SERVICE;
 
 public class CalculatorFragment extends Fragment {
 
@@ -51,6 +57,7 @@ public class CalculatorFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         System.out.println("MIA       Calculator Fragment -> onViewCreated()");
+        this.getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
         db = new DatabaseHelper(getActivity().getApplicationContext());
@@ -76,6 +83,11 @@ public class CalculatorFragment extends Fragment {
                     sharedViewModel.setMaxCaffinie(calculatorViewModel.maxCaffeine
                             (Integer.parseInt(age_entry_answer), Double.parseDouble
                                     (weight_entry_answer)));
+
+                    // Show a toast to notify user data has been sent to database
+                    Toast toast = Toast.makeText(getActivity(), "Saved!", Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
                 }
             }
         });
@@ -95,6 +107,12 @@ public class CalculatorFragment extends Fragment {
 
             @Override
             public void onClick(View v) {
+                try {
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                } catch (Exception e) {
+                    // TODO: handle exception
+                }
                 // TimePicker
                 Calendar mcurrentTime = Calendar.getInstance();
                 int hour = mcurrentTime.get(Calendar.HOUR_OF_DAY);
@@ -134,6 +152,10 @@ public class CalculatorFragment extends Fragment {
 
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
                         1000 * 60 * 20, pendingIntent);
+
+                Toast toast = Toast.makeText(getActivity(), "Start!", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.RIGHT, 100, 500);
+                toast.show();
             }
         });
     }
