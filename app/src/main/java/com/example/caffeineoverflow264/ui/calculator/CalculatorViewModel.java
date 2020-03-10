@@ -48,15 +48,14 @@ public class CalculatorViewModel extends ViewModel {
 
         //Calculate maximum Caffeine in mg per user;
         Cursor userCursor = DatabaseHelper.getUserDetails();
+        if (!userCursor.moveToFirst()) {
+            System.out.println("No user recorded");
+            return 0.0;
+        }
         userCursor.moveToFirst();
         weight = userCursor.getDouble(2);
         age = userCursor.getInt(3);
         maxCaffeine = maxCaffeine(age,weight);
-        if (!userCursor.moveToFirst()) {
-            System.out.println("No user recorded");
-            return maxCaffeine;
-        }
-
         Date currDateClicked = new Date();
         System.out.println(currDateClicked.toString());
 

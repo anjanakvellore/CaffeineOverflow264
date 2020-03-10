@@ -68,13 +68,15 @@ public class CalculatorFragment extends Fragment {
                 EditText age_entry = (EditText) getView().findViewById(R.id.age_entry);
                 String age_entry_answer = age_entry.getText().toString();
 
-                db.insertUser(Double.parseDouble(height_entry_answer),Double.parseDouble
-                        (weight_entry_answer),Integer.parseInt(age_entry_answer));
+                if(!height_entry_answer.trim().isEmpty() && !weight_entry_answer.trim().isEmpty() && !age_entry_answer.trim().isEmpty()) {
+                    db.insertUser(Double.parseDouble(height_entry_answer), Double.parseDouble
+                            (weight_entry_answer), Integer.parseInt(age_entry_answer));
 
-                //Set maxCaffeine for Log
-                sharedViewModel.setMaxCaffinie(calculatorViewModel.maxCaffeine
-                        (Integer.parseInt(age_entry_answer),Double.parseDouble
-                                (weight_entry_answer)));
+                    //Set maxCaffeine for Log
+                    sharedViewModel.setMaxCaffinie(calculatorViewModel.maxCaffeine
+                            (Integer.parseInt(age_entry_answer), Double.parseDouble
+                                    (weight_entry_answer)));
+                }
             }
         });
 
