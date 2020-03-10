@@ -25,7 +25,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.caffeineoverflow264.R;
 import com.example.caffeineoverflow264.model.CalendarEvent;
-import com.example.caffeineoverflow264.repository.service.api.DatabaseHelper;
 import com.example.caffeineoverflow264.ui.SharedViewModel;
 import com.example.caffeineoverflow264.ui.recipe.RecipeFragment;
 import com.example.caffeineoverflow264.util.CalendarEventListAdapter;
@@ -68,6 +67,7 @@ public class LogFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
 
         sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
+        logViewModel = ViewModelProviders.of(getActivity()).get(LogViewModel.class);
         maxCaffinie = sharedViewModel.getMaxCaffinie().getValue();
         // Generate calendar UI
         generateCalendar();
@@ -103,7 +103,7 @@ public class LogFragment extends Fragment {
         int oz = Integer.valueOf(eventCount);
         int coffeeId = -1;
         int dripCoffeId = -1;
-        Cursor coffeeListCursor = DatabaseHelper.getCoffeeList();
+        Cursor coffeeListCursor = logViewModel.getCoffeeList().getValue();
 
         boolean needToANewCoffeeItem = false;
         if (coffeeListCursor.moveToFirst()) {
@@ -119,7 +119,7 @@ public class LogFragment extends Fragment {
                     coffeeId = thisCoffeeId;
                     needToANewCoffeeItem = true;
                 }
-                if (candidateCoffeeName.compareToIgnoreCase("drip coffee") == 0 ) {
+                if (candidateCoffeeName.compareToIgnoreCase("drip coffee") == 0) {
                     dripCoffeId = thisCoffeeId;
                 }
             } while (coffeeListCursor.moveToNext());
@@ -131,12 +131,12 @@ public class LogFragment extends Fragment {
         }
         if (needToANewCoffeeItem) {
             // Get caffineamount
-            int caffeineAmount = DatabaseHelper.getCaffeineAmount(coffeeId);
-            DatabaseHelper.insertCoffeeItem(coffeeName, caffeineAmount);
-            coffeeId = DatabaseHelper.getCoffeeIdByName(coffeeName);
+            int caffeineAmount = logViewModel.getCaffeineAmount(coffeeId).getValue();
+            logViewModel.insertCoffeeItem(coffeeName, caffeineAmount);
+            coffeeId = logViewModel.getCoffeeIdByName(coffeeName).getValue();
         }
         // Insert the coffee event into the calendar
-        DatabaseHelper.insertIntoLog(currDateClicked.toString(), coffeeId, oz);
+        logViewModel.insertIntoLog(currDateClicked.toString(), coffeeId, oz);
         // Clear all events and add again
         compactCalendarView.removeEvents(currDateClicked);
         List<Event> events = new ArrayList<>();
@@ -159,16 +159,16 @@ public class LogFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(dateFormatForMonth.format(compactCalendarView.getFirstDayOfCurrentMonth()));
         compactCalendarView.setFirstDayOfWeek(Calendar.MONDAY);
         // Get all the events and push into the calendar
-        Cursor allLogsCursor = DatabaseHelper.getLogDetails();
+        Cursor allLogsCursor = logViewModel.getLogDetails().getValue();
         ArrayList<Date> dates = new ArrayList<>();
         if (allLogsCursor.moveToFirst()) {
             do {
                 String thisDate = allLogsCursor.getString(1);
                 dates.add(new Date(thisDate));
-            }while(allLogsCursor.moveToNext());
+            } while (allLogsCursor.moveToNext());
         }
         allLogsCursor.close();
-        for ( Date thisDate : dates) {
+        for (Date thisDate : dates) {
             List<Event> events = new ArrayList<>();
             getEventsOnADay(thisDate, events);
             compactCalendarView.removeEvents(thisDate);
@@ -186,6 +186,7 @@ public class LogFragment extends Fragment {
                 // Update recycler view
                 updateEventListRecycler(compactCalendarView.getEvents(currDateClicked));
             }
+
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
                 Log.d(TAG, "Month was scrolled to: " + firstDayOfNewMonth);
@@ -199,7 +200,7 @@ public class LogFragment extends Fragment {
         currDateClicked = dateClicked;
         // Get events on that date
         String currDateClickedStr = dateClicked.toString();
-        Cursor logCursor = DatabaseHelper.getLogDetailsOnOneDay(currDateClickedStr);
+        Cursor logCursor = logViewModel.getLogDetailsOnOneDay(currDateClickedStr).getValue();
         System.out.println("Date clicked " + currDateClickedStr);
 
         if (!logCursor.moveToFirst()) {
@@ -211,10 +212,12 @@ public class LogFragment extends Fragment {
         // TODO: DELETE THIS HARDCODED NUMBER for maxCaffinie
         maxCaffinie = 100;
         do {
-            String coffeeName = DatabaseHelper.getCoffeeNameById( logCursor.getInt(2));
+            int coffeeID = logCursor.getInt(2);
+            String coffeeName = logViewModel.getCoffeeNameById(coffeeID).getValue();
             int coffeeId = logCursor.getInt(2);
             // Get caffine amount per oz for this coffeeId
-            int caffineAmount = DatabaseHelper.getCaffeineAmount(coffeeId);
+            int caffineAmount = logViewModel.getCaffeineAmount(coffeeId).getValue();
+            System.out.println("      view model get caffine amount " + caffineAmount);
             int oz = logCursor.getInt(3);
             caffineIntake += oz * caffineAmount;
             CalendarEvent calendarEvent = new CalendarEvent(coffeeName, oz);
@@ -222,7 +225,7 @@ public class LogFragment extends Fragment {
         } while (logCursor.moveToNext());
 
         int eventColor = Color.GREEN;
-        if (caffineIntake > maxCaffinie ) {
+        if (caffineIntake > maxCaffinie) {
             eventColor = Color.BLACK;
         }
         for (CalendarEvent calendarEvent : allEventsOnThatDay) {
@@ -258,8 +261,8 @@ public class LogFragment extends Fragment {
                 .show();
     }
 
-    private void changeIcon(){
-        BottomNavigationView btnNavView = this.getView().getRootView().findViewById(R.id.nav_view) ;
+    private void changeIcon() {
+        BottomNavigationView btnNavView = this.getView().getRootView().findViewById(R.id.nav_view);
         btnNavView.getMenu().findItem(R.id.navigation_recipe).setChecked(true);
     }
 
@@ -282,7 +285,7 @@ public class LogFragment extends Fragment {
                 })
                 .setNegativeButton("go to amazon", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        String data = "https://www.amazon.com/s?k=" + calendarEvent.getEventName()+"&ref=nb_sb_noss";
+                        String data = "https://www.amazon.com/s?k=" + calendarEvent.getEventName() + "&ref=nb_sb_noss";
                         Intent defaultBrowser = Intent.makeMainSelectorActivity(Intent.ACTION_MAIN, Intent.CATEGORY_APP_BROWSER);
                         defaultBrowser.setData(Uri.parse(data));
                         startActivity(defaultBrowser);
