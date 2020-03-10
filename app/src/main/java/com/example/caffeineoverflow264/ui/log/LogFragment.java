@@ -227,7 +227,7 @@ public class LogFragment extends Fragment {
         } while (logCursor.moveToNext());
 
         int eventColor = Color.GREEN;
-        if (caffineIntake > maxCaffinie) {
+        if (maxCaffinie!=-1 && caffineIntake > maxCaffinie) {
             alert = true;
             eventColor = Color.BLACK;
         }
