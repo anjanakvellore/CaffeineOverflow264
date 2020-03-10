@@ -138,7 +138,8 @@ public class LogFragment extends Fragment {
             coffeeId = logViewModel.getCoffeeIdByName(coffeeName).getValue();
         }
         // Insert the coffee event into the calendar
-        logViewModel.insertIntoLog(currDateClicked.toString(), coffeeId, oz);
+        String dateString = new SimpleDateFormat("MM/dd/yyyy").format(currDateClicked);
+        logViewModel.insertIntoLog(dateString, coffeeId, oz);
         // Clear all events and add again
         compactCalendarView.removeEvents(currDateClicked);
         List<Event> events = new ArrayList<>();
@@ -201,7 +202,7 @@ public class LogFragment extends Fragment {
     private void getEventsOnADay(Date dateClicked, List<Event> events) {
         currDateClicked = dateClicked;
         // Get events on that date
-        String currDateClickedStr = dateClicked.toString();
+        String currDateClickedStr = new SimpleDateFormat("MM/dd/yyyy").format(dateClicked);
         Cursor logCursor = logViewModel.getLogDetailsOnOneDay(currDateClickedStr).getValue();
         System.out.println("Date clicked " + currDateClickedStr);
 

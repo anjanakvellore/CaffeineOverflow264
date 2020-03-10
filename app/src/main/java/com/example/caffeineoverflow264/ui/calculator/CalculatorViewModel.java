@@ -58,8 +58,8 @@ public class CalculatorViewModel extends ViewModel {
         maxCaffeine = maxCaffeine(age,weight);
         Date currDateClicked = new Date();
         System.out.println(currDateClicked.toString());
-
-        Cursor logCursor = DatabaseHelper.getLogDetailsOnOneDay(currDateClicked.toString());
+        String dateString = new SimpleDateFormat("MM/dd/yyyy").format(currDateClicked);
+        Cursor logCursor = DatabaseHelper.getLogDetailsOnOneDay(dateString);
         if (!logCursor.moveToFirst()) {
             System.out.println("No intake recorded");
             return maxCaffeine;
