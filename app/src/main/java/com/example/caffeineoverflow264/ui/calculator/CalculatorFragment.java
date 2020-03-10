@@ -23,9 +23,11 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.caffeineoverflow264.MainActivity;
 import com.example.caffeineoverflow264.R;
+import com.example.caffeineoverflow264.model.User;
 import com.example.caffeineoverflow264.repository.service.ReminderBroadcast;
 import com.example.caffeineoverflow264.repository.service.api.DatabaseHelper;
 import com.example.caffeineoverflow264.ui.SharedViewModel;
+import com.itextpdf.awt.geom.Rectangle2D;
 
 import java.util.Calendar;
 
@@ -54,18 +56,26 @@ public class CalculatorFragment extends Fragment {
 
         sharedViewModel = ViewModelProviders.of(getActivity()).get(SharedViewModel.class);
         db = new DatabaseHelper(getActivity().getApplicationContext());
+        EditText height_entry = (EditText) getView().findViewById(R.id.height_entry);
+        EditText weight_entry = (EditText) getView().findViewById(R.id.weight_entry);
+        EditText age_entry = (EditText) getView().findViewById(R.id.age_entry);
+        User user = calculatorViewModel.getUserDetails().getValue();
+
+        if(user!=null){
+            height_entry.setText(Double.toString(user.getHeight()));
+            weight_entry.setText(Double.toString(user.getWeight()));
+            age_entry.setText(Integer.toString(user.getAge()));
+        }
 
         Enter_button = (ImageButton) getView().findViewById(R.id.Enter_button);
         Enter_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText height_entry = (EditText) getView().findViewById(R.id.height_entry);
                 String height_entry_answer = height_entry.getText().toString();
 
-                EditText weight_entry = (EditText) getView().findViewById(R.id.weight_entry);
                 String weight_entry_answer = weight_entry.getText().toString();
 
-                EditText age_entry = (EditText) getView().findViewById(R.id.age_entry);
+
                 String age_entry_answer = age_entry.getText().toString();
 
                 if(!height_entry_answer.trim().isEmpty() && !weight_entry_answer.trim().isEmpty() && !age_entry_answer.trim().isEmpty()) {

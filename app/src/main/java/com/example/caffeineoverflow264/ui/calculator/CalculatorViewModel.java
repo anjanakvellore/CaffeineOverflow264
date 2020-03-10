@@ -4,10 +4,14 @@ import android.database.Cursor;
 import android.os.Handler;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModel;
 
+import com.example.caffeineoverflow264.model.User;
 import com.example.caffeineoverflow264.repository.service.api.DatabaseHelper;
 
 import java.text.SimpleDateFormat;
@@ -39,6 +43,20 @@ public class CalculatorViewModel extends ViewModel {
         return maxCaffeine;
     }
 
+
+    public LiveData<User> getUserDetails() {
+        Cursor cursor = DatabaseHelper.getUserDetails();
+        if(cursor.moveToLast()){
+            double height = cursor.getDouble(1);
+            double weight = cursor.getDouble(2);
+            int age = cursor.getInt(3);
+
+            return new MutableLiveData<User>(new User(height,weight,age));
+
+        }
+        return new MutableLiveData<User>(null);
+    }
+
     //To calculate Caffeine left
     public double calculateCaffeine(){
         double caffeine, weight, maxCaffeine,caffeineIntake;
@@ -52,7 +70,7 @@ public class CalculatorViewModel extends ViewModel {
             System.out.println("No user recorded");
             return 0.0;
         }
-        userCursor.moveToFirst();
+        userCursor.moveToLast();
         weight = userCursor.getDouble(2);
         age = userCursor.getInt(3);
         maxCaffeine = maxCaffeine(age,weight);

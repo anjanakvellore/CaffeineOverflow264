@@ -111,6 +111,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+
+
     public static String getCoffeeNameById(int id){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.query("COFFEE",
